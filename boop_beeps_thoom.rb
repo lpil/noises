@@ -2,13 +2,10 @@ use_bpm 90
 
 our_scale = :minor_pentatonic
 
-live_loop :metronome_beat do
-  cue :beat
+live_loop :beat do |n|
+  cue :bar    if n % 4 == 0
+  cue :phrase if n % 32 == 0
   sleep 1
-end
-live_loop :metronome_bar do |n|
-  sync :beat
-  cue :bar if n % 4 == 0
   n + 1
 end
 
@@ -48,11 +45,9 @@ live_loop :beeps do
   end
 end
 
-live_loop :thoom do |n|
-  sync :bar
-  if n % 8 == 0
-    with_fx :reverb, room: 1 do
-      sample :bd_boom, amp: 3
-    end
+live_loop :thoom do
+  sync :phrase
+  with_fx :reverb, room: 1 do
+    sample :bd_boom, amp: 3
   end
 end
